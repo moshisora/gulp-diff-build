@@ -1,0 +1,39 @@
+{
+    "name": "gulp-diff-build",
+    "version": "0.0.1",
+    "description": "run tasks only src files are changed",
+    "license": "MIT",
+    "repository": "moshisora/gulp-diff-build",
+    "author": {
+        "name": "moshisora",
+        "url": "http://github.com/moshisora"
+    },
+    "engines": {
+        "node": ">=0.10.0"
+    },
+    "scripts": {
+        "test": "mocha"
+    },
+    "files": [
+        "fexture/script.js"
+    ],
+    "keywords": [
+        "gulpplugin",
+        "file",
+        "files",
+        "changed",
+        "newer",
+        "modified",
+        "diff"
+    ],
+    "dependencies": {
+        "gulp-util": "^3.0.0",
+        "through2": "^2.0.0"
+    },
+    "devDependencies": {
+        "concat-stream": "^1.4.6",
+        "gulp": "^3.0.0",
+        "mocha": "*",
+        "rimraf": "^2.2.6"
+    }
+}
