@@ -1,3 +1,5 @@
+![build status](https://circleci.com/gh/moshisora/gulp-diff-build.svg?style=shield&circle-token=8a39ce8a8622dc749863c218662f9befc01642fd)
+
 ## gulp-diff-build
 
 gulp module to stream files only if target files are changed.
@@ -24,15 +26,15 @@ gulp.task('default', () => {
 
 ### clear
 
-Type: `bool`
+Type: `bool` Default value: `false`
 
 flush file hashes running with clear option value: `true`
 
 ### dest
 
-Type: `string` or `array`
+Type: `string` or `array` Default value: `undefined`
 
-option to filter streaming files. This task will stream only files that match given paths into the gulp stream.
+option to filter streaming files. This task will stream only files that match given paths into the gulp stream. If it is undefined, all files will be passed.
 
 ## Example
 
