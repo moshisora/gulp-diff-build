@@ -4,13 +4,21 @@
 
 gulp module to stream files only if target files are changed.
 
-## Usage
+## Getting Started
+
+### Install
+
+```
+$ npm install gulp-diff-build --save-dev
+```
+
+### Usage
 
 This task will keep a hash reference of target files and run defined tasks only if files changed.
 File hashes will be saved in .gulp/gulp-diff-build/hash.json. You might like to add .gulp to your .gitignore.
 
 ```javascript
-const diff = require('./diff');
+const diff = require('gulp-diff-build');
 
 const SRC = 'src';
 const DEST = 'dist';
@@ -43,7 +51,7 @@ example of building sass.
 gulp task watch all of sass src files and stream only `main.sass` and `main-sp.sass` into `sass()` task.
 
 ```javascript
-const diff = require('./diff');
+const diff = require('gulp-diff-build');
 
 gulp.task('default', () => {
     gulp.src('src/sass/**/*.sass')
