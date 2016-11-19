@@ -56,7 +56,7 @@ module.exports = function (options) {
 
     function flush(callback) {
         var me = this,
-            hash = {};
+            hash = cached;
 
         if (hasDiff) {
             Array.from(files).forEach(function (file, index) {

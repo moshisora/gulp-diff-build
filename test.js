@@ -31,7 +31,7 @@ describe('run', function () {
             }));
     });
 
-    it('cache clear', function (callback) {
+    it('clear cache', function (callback) {
         gulp.src('test/src/*.js')
             .pipe(diff({
                 clear: true
@@ -68,6 +68,37 @@ describe('run', function () {
                 assert.equal(2, buf.length);
                 assert.equal(fs.realpathSync('./') + '/test/src/2.js', buf[0].path);
                 assert.equal(fs.realpathSync('./') + '/test/src/3.js', buf[1].path);
+                callback();
+            }));
+    });
+});
+
+describe('cache', function () {
+    it('run to cache', function (callback) {
+        gulp.src('test/src/1.js')
+            .pipe(diff({
+                clear: true
+            }))
+            .pipe(concatStream(function (buf) {
+                assert.equal(1, buf.length);
+                callback();
+            }));
+    });
+
+    it('run to cache another file', function (callback) {
+        gulp.src('test/src/2.js')
+            .pipe(diff())
+            .pipe(concatStream(function (buf) {
+                assert.equal(1, buf.length);
+                callback();
+            }));
+    });
+
+    it('check keeping cache', function (callback) {
+        gulp.src('test/src/1.js')
+            .pipe(diff())
+            .pipe(concatStream(function (buf) {
+                assert.equal(0, buf.length);
                 callback();
             }));
     });
