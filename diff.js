@@ -4,6 +4,7 @@ const util = require('gulp-util');
 const through = require('through2');
 const fs = require('fs');
 const crypto = require('crypto');
+const mkdirp = require('mkdirp');
 
 const SETTING = {
     hash: '.gulp/gulp-diff-build/hash.json'
@@ -31,7 +32,7 @@ module.exports = function (options) {
         }
     }
 
-    if (isExistFile(SETTING.hash)) {
+    if (isFileExist(SETTING.hash)) {
         cached = JSON.parse(fs.readFileSync(SETTING.hash, 'utf8'));
     } else {
         hasDiff = true;
@@ -64,6 +65,7 @@ module.exports = function (options) {
                 var filename = filePaths[index];
                 hash[filename] = sha1(file.contents);
             });
+            mkdirp.sync(SETTING.hash.replace(/[^\/]+\.json$/, ''));
             fs.writeFileSync(SETTING.hash, JSON.stringify(hash), {
                 encoding: 'utf8',
             });
@@ -77,7 +79,7 @@ function sha1(buf) {
     return crypto.createHash('sha1').update(buf).digest('hex');
 }
 
-function isExistFile(path) {
+function isFileExist(path) {
     try {
         fs.statSync(path);
         return true;
@@ -89,8 +91,8 @@ function isExistFile(path) {
 function flushHash() {
     util.log('[log] flushing hash...');
 
-    if (!isExistFile(SETTING.hash)) {
-        util.log(util.colors.red('[error] hash file is not exist.'));
+    if (!isFileExist(SETTING.hash)) {
+        util.log(util.colors.yellow('[warning] hash file is not exist.'));
         return;
     }
 
