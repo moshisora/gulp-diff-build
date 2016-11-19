@@ -38,7 +38,7 @@ option to filter streaming files. This task will stream only files that match gi
 
 example of building sass.
 
-gulp task watching all of sass src files and stream only `main.sass` and `main-sp.sass` into `sass()` task.
+gulp task watch all of sass src files and stream only `main.sass` and `main-sp.sass` into `sass()` task.
 
 ```javascript
 const diff = require('./diff');

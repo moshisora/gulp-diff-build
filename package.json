@@ -1,7 +1,7 @@
 {
     "name": "gulp-diff-build",
     "version": "0.0.1",
-    "description": "run tasks only src files are changed",
+    "description": "run tasks only if src files are changed",
     "license": "MIT",
     "repository": "moshisora/gulp-diff-build",
     "author": {
@@ -9,7 +9,7 @@
         "url": "http://github.com/moshisora"
     },
     "engines": {
-        "node": ">=0.10.0"
+        "node": ">=4.0.0"
     },
     "scripts": {
         "test": "mocha"
@@ -31,9 +31,7 @@
         "through2": "^2.0.0"
     },
     "devDependencies": {
-        "concat-stream": "^1.4.6",
         "gulp": "^3.0.0",
-        "mocha": "*",
-        "rimraf": "^2.2.6"
+        "mocha": "*"
     }
 }
