@@ -46,7 +46,7 @@ option to filter streaming files. This task will stream only files that match gi
 
 ### hash
 
-Type: `string` Defualt value: `''`
+Type: `string` Defualt value: `'hash'`
 
 options to define filename of hash references for multi tasking or multi cache control. files of hash references will be saved as `.gulp/gulp-diff-build/[givenName].json`.
 
