@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const util = require('gulp-util');
 const through = require('through2');
