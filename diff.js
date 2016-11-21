@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const util = require('gulp-util');
 const through = require('through2');
@@ -7,6 +7,7 @@ const crypto = require('crypto');
 const mkdirp = require('mkdirp');
 
 const SETTING = {
+    path: '.gulp/gulp-diff-build/',
     hash: '.gulp/gulp-diff-build/hash.json'
 };
 
@@ -18,9 +19,7 @@ module.exports = function (options) {
         filter = [],
         cached = {},
         hasDiff = false,
-        regexp = new RegExp(fs.realpathSync('./') + '/');
-
-    if (options.clear === true) flushHash();
+        hashPath = '';
 
     if ('dest' in options) {
         if (Array.isArray(options.dest)) {
@@ -32,8 +31,18 @@ module.exports = function (options) {
         }
     }
 
-    if (isFileExist(SETTING.hash)) {
-        cached = JSON.parse(fs.readFileSync(SETTING.hash, 'utf8'));
+    if (typeof (options.hash) === 'string') {
+        hashPath = options.hash;
+        if (!hashPath.match(/\.json$/)) hashPath += '.json';
+        hashPath = SETTING.path + hashPath;
+    }
+
+    hashPath = hashPath || SETTING.hash;
+
+    if (options.clear === true) flushHash(hashPath);
+
+    if (isFileExist(hashPath)) {
+        cached = JSON.parse(fs.readFileSync(hashPath, 'utf8'));
     } else {
         hasDiff = true;
     }
@@ -41,7 +50,8 @@ module.exports = function (options) {
     return through.obj(transform, flush);
 
     function transform(file, encoding, callback) {
-        var filename = file.path.replace(regexp, '');
+        var regexp = new RegExp(fs.realpathSync('./') + '/'),
+            filename = file.path.replace(regexp, '');
 
         if (!hasDiff && (cached[filename] !== sha1(file.contents))) {
             hasDiff = true;
@@ -65,8 +75,8 @@ module.exports = function (options) {
                 var filename = filePaths[index];
                 hash[filename] = sha1(file.contents);
             });
-            mkdirp.sync(SETTING.hash.replace(/[^\/]+\.json$/, ''));
-            fs.writeFileSync(SETTING.hash, JSON.stringify(hash), {
+            mkdirp.sync(hashPath.replace(/[^\/]+\.json$/, ''));
+            fs.writeFileSync(hashPath, JSON.stringify(hash), {
                 encoding: 'utf8',
             });
         }
@@ -88,14 +98,14 @@ function isFileExist(path) {
     }
 }
 
-function flushHash() {
+function flushHash(hashPath) {
     util.log('[log] flushing hash...');
 
-    if (!isFileExist(SETTING.hash)) {
+    if (!isFileExist(hashPath)) {
         util.log(util.colors.yellow('[warning] hash file is not exist.'));
         return;
     }
 
-    fs.unlinkSync(SETTING.hash);
+    fs.unlinkSync(hashPath);
     util.log(util.colors.green('[log] flushing hash was completed!'));
 }
