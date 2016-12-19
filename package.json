@@ -15,7 +15,7 @@
     "test": "mocha test/*.js"
   },
   "files": [
-    "diff.js"
+    "index.js"
   ],
   "keywords": [
     "gulpplugin",
