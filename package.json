@@ -1,6 +1,6 @@
 {
   "name": "gulp-diff-build",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "run tasks only if src files are changed",
   "license": "MIT",
   "repository": "moshisora/gulp-diff-build",
