@@ -3,7 +3,7 @@
 var fs = require('fs'),
     assert = require('assert'),
     gulp = require('gulp'),
-    diff = require('../diff.js'),
+    diff = require('../index.js'),
     concatStream = require('concat-stream'),
     rimraf = require('rimraf');
 
