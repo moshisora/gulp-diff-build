@@ -14,8 +14,9 @@ const SETTING = {
 module.exports = function (options) {
     options = options || {};
 
-    var files = [],
-        filePaths = [],
+    var destFiles = [],
+        hashFiles = [],
+        hashPaths = [],
         filter = [],
         cached = {},
         hasDiff = false,
@@ -57,9 +58,11 @@ module.exports = function (options) {
             hasDiff = true;
         }
 
+        hashFiles.push(file);
+        hashPaths.push(filename);
+
         if ((filter.length === 0) || (filter.indexOf(filename) >= 0)) {
-            files.push(file);
-            filePaths.push(filename);
+            destFiles.push(file);
         }
         callback();
     }
@@ -69,18 +72,19 @@ module.exports = function (options) {
             hash = cached;
 
         if (hasDiff) {
-            Array.from(files).forEach(function (file, index) {
-                me.push(file);
-
-                var filename = filePaths[index];
+            Array.from(hashFiles).forEach(function (file, index) {
+                var filename = hashPaths[index];
                 hash[filename] = sha1(file.contents);
             });
             mkdirp.sync(hashPath.replace(/[^\/]+\.json$/, ''));
             fs.writeFileSync(hashPath, JSON.stringify(hash), {
                 encoding: 'utf8',
             });
-        }
 
+            Array.from(destFiles).forEach(function (file, index) {
+                me.push(file);
+            });
+        }
         callback();
     }
 };
