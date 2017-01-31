@@ -36,7 +36,13 @@ gulp.task('default', () => {
 
 Type: `bool` Default value: `false`
 
-flush file hashes running with clear option value: `true`
+flush hash file when running with clear option value: `true`
+
+### clearAll
+
+Type: `bool` Default value: `false`
+
+flush all hash files when running with clearAll option value: `true`
 
 ### dest
 
