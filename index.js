@@ -14,7 +14,7 @@ const SETTING = {
 module.exports = function (options) {
     options = options || {};
 
-    var destFiles = [],
+    let destFiles = [],
         hashFiles = [],
         hashPaths = [],
         filter = [],
@@ -41,6 +41,7 @@ module.exports = function (options) {
     hashPath = hashPath || SETTING.hash;
 
     if (options.clear === true) flushHash(hashPath);
+    if (options.clearAll === true) flushHashAll();
 
     if (isFileExist(hashPath)) {
         cached = JSON.parse(fs.readFileSync(hashPath, 'utf8'));
@@ -51,7 +52,7 @@ module.exports = function (options) {
     return through.obj(transform, flush);
 
     function transform(file, encoding, callback) {
-        var regexp = new RegExp(fs.realpathSync('./') + '/'),
+        let regexp = new RegExp(fs.realpathSync('./') + '/'),
             filename = file.path.replace(regexp, '');
 
         if (!hasDiff && (cached[filename] !== sha1(file.contents))) {
@@ -68,12 +69,12 @@ module.exports = function (options) {
     }
 
     function flush(callback) {
-        var me = this,
+        let me = this,
             hash = cached;
 
         if (hasDiff) {
             Array.from(hashFiles).forEach(function (file, index) {
-                var filename = hashPaths[index];
+                let filename = hashPaths[index];
                 hash[filename] = sha1(file.contents);
             });
             mkdirp.sync(hashPath.replace(/[^\/]+\.json$/, ''));
@@ -112,4 +113,20 @@ function flushHash(hashPath) {
 
     fs.unlinkSync(hashPath);
     util.log(util.colors.green('[log] flushing hash was completed!'));
+}
+
+function flushHashAll() {
+    util.log('[log] flushing all hash...');
+
+    let targetFiles = fs.readdirSync(SETTING.path);
+
+    if (!targetFiles.length) {
+        util.log(util.colors.yellow('[warning] hash files are not exist.'));
+        return;
+    }
+
+    Array.from(targetFiles).forEach(function (file, index) {
+        fs.unlinkSync(SETTING.path + file);
+    });
+    util.log(util.colors.green('[log] flushing hashes ware completed!'));
 }
