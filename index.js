@@ -120,7 +120,7 @@ function flushHash(hashPath) {
 }
 
 function flushHashAll() {
-    util.log('[diff log] flushing all hash...');
+    util.log('[diff log] flushing all hashes...');
 
     let targetFiles = fs.readdirSync(SETTING.path);
 
