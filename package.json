@@ -1,6 +1,6 @@
 {
   "name": "gulp-diff-build",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "run tasks only if src files are changed",
   "license": "MIT",
   "repository": "moshisora/gulp-diff-build",
@@ -28,12 +28,12 @@
   ],
   "dependencies": {
     "gulp-util": "^3.0.0",
+    "mkdirp": "^0.5.1",
     "through2": "^2.0.0"
   },
   "devDependencies": {
     "concat-stream": "^1.4.6",
     "gulp": "^3.0.0",
-    "mkdirp": "^0.5.1",
     "mocha": "*",
     "rimraf": "^2.2.6"
   }
