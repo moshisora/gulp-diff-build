@@ -43,7 +43,7 @@ module.exports = function (options) {
     if (options.clear === true) flushHash(hashPath);
     if (options.clearAll === true) flushHashAll();
 
-    if (isFileExist(hashPath)) {
+    if (isExist(hashPath)) {
         cached = JSON.parse(fs.readFileSync(hashPath, 'utf8'));
     } else {
         hasDiff = true;
@@ -98,7 +98,7 @@ function sha1(buf) {
     return crypto.createHash('sha1').update(buf).digest('hex');
 }
 
-function isFileExist(path) {
+function isExist(path) {
     try {
         fs.statSync(path);
         return true;
@@ -110,17 +110,22 @@ function isFileExist(path) {
 function flushHash(hashPath) {
     util.log('[diff log] flushing hash...');
 
-    if (!isFileExist(hashPath)) {
+    if (!isExist(hashPath)) {
         util.log(util.colors.yellow('[diff warning] hash file is not exist.'));
         return;
     }
 
     fs.unlinkSync(hashPath);
-    util.log(util.colors.green('[diff log] flushing hash was completed!'));
+    util.log(util.colors.green('[diff log] flushing hash completed!'));
 }
 
 function flushHashAll() {
     util.log('[diff log] flushing all hashes...');
+
+    if (!isExist(SETTING.path)) {
+        util.log(util.colors.yellow('[diff warning] hash files are not exist.'));
+        return;
+    }
 
     let targetFiles = fs.readdirSync(SETTING.path);
 
@@ -132,5 +137,5 @@ function flushHashAll() {
     Array.from(targetFiles).forEach(function (file, index) {
         fs.unlinkSync(SETTING.path + file);
     });
-    util.log(util.colors.green('[diff log] flushing hashes ware completed!'));
+    util.log(util.colors.green('[diff log] flushing hashes completed!'));
 }
