@@ -8,6 +8,8 @@ var fs = require('fs'),
     rimraf = require('rimraf');
 
 describe('run', function () {
+    var originalContent = fs.readFileSync('test/src/1.js', 'utf8');
+
     before(function (callback) {
         rimraf('.gulp/gulp-diff-build', callback);
     });
@@ -31,7 +33,6 @@ describe('run', function () {
     });
 
     it('file is changed', function (callback) {
-        var originalContent = fs.readFileSync('test/src/1.js', 'utf8')
         fs.writeFileSync('test/src/1.js', 'var a = 1;', {
             encoding: 'utf8',
         });
@@ -56,6 +57,23 @@ describe('run', function () {
             }))
             .pipe(concatStream(function (buf) {
                 assert.equal(3, buf.length);
+                callback();
+            }));
+    });
+
+    it('delete file', function (callback) {
+        rimraf('test/src/1.js', callback);
+    });
+
+    it('changing should detect after file deleting', function (callback) {
+        gulp.src('test/src/*.js')
+            .pipe(diff())
+            .pipe(concatStream(function (buf) {
+                assert.equal(2, buf.length);
+
+                fs.writeFileSync('test/src/1.js', originalContent, {
+                    encoding: 'utf8',
+                });
                 callback();
             }));
     });

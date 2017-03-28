@@ -72,6 +72,10 @@ module.exports = function (options) {
         let me = this,
             hash = cached;
 
+        if (sizeOfHash(cached) != hashPaths.length) {
+            hasDiff = true;
+        }
+
         if (hasDiff) {
             util.log(util.colors.green('[diff log] Changes detected.'));
 
@@ -138,4 +142,14 @@ function flushHashAll() {
         fs.unlinkSync(SETTING.path + file);
     });
     util.log(util.colors.green('[diff log] flushing hashes completed!'));
+}
+
+function sizeOfHash(hash) {
+    var size = 0;
+
+    for (var i in hash) {
+        size++;
+    }
+
+    return size;
 }
