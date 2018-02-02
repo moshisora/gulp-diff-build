@@ -5,6 +5,7 @@ const through = require('through2');
 const fs = require('fs');
 const crypto = require('crypto');
 const mkdirp = require('mkdirp');
+const path = require('path');
 
 const SETTING = {
     path: '.gulp/gulp-diff-build/',
@@ -49,11 +50,25 @@ module.exports = function (options) {
         hasDiff = true;
     }
 
-    return through.obj(transform, flush);
+    return through.obj(function(file, encoding, callback)
+    {
+        if ( file.isNull() ) callback(null,file);
+        else {
+            if ( file.isBuffer() ) transform(file, encoding, callback);
+            if ( file.isStream() )
+            {
+                file.contents.pipe(through(function(chunk,enc,cb){
+                    file.contents = chunk;
+                    transform(file, encoding, callback);
+                    cb();
+                }));
+            }
+        }
+    }
+    ,flush);
 
     function transform(file, encoding, callback) {
-        let regexp = new RegExp(fs.realpathSync('./') + '/'),
-            filename = file.path.replace(regexp, '');
+        let filename = path.relative(file.cwd, file.path);
 
         if (!hasDiff && (cached[filename] !== sha1(file.contents))) {
             hasDiff = true;
@@ -65,6 +80,7 @@ module.exports = function (options) {
         if ((filter.length === 0) || (filter.indexOf(filename) >= 0)) {
             destFiles.push(file);
         }
+
         callback();
     }
 
@@ -115,7 +131,7 @@ function flushHash(hashPath) {
     util.log('[diff log] flushing hash...');
 
     if (!isExist(hashPath)) {
-        util.log(util.colors.yellow('[diff warning] hash file is not exist.'));
+        util.log(util.colors.yellow('[diff warning] hash file does not exist.'));
         return;
     }
 
@@ -127,14 +143,14 @@ function flushHashAll() {
     util.log('[diff log] flushing all hashes...');
 
     if (!isExist(SETTING.path)) {
-        util.log(util.colors.yellow('[diff warning] hash files are not exist.'));
+        util.log(util.colors.yellow('[diff warning] hash files does not exist.'));
         return;
     }
 
     let targetFiles = fs.readdirSync(SETTING.path);
 
     if (!targetFiles.length) {
-        util.log(util.colors.yellow('[diff warning] hash files are not exist.'));
+        util.log(util.colors.yellow('[diff warning] hash files is empty.'));
         return;
     }
 

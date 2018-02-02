@@ -8,6 +8,9 @@ var fs = require('fs'),
     rimraf = require('rimraf');
 
 describe('run', function () {
+    fs.writeFileSync('test/src/1.js', '/* create a dummy file */', {
+        encoding: 'utf8',
+    });
     var originalContent = fs.readFileSync('test/src/1.js', 'utf8');
 
     before(function (callback) {
@@ -32,12 +35,39 @@ describe('run', function () {
             }));
     });
 
-    it('file is changed', function (callback) {
+    it('run again - stream', function (callback) {
+        gulp.src('test/src/*.js',{buffer:false})
+            .pipe(diff())
+            .pipe(concatStream(function (buf) {
+                assert.equal(0, buf.length);
+                callback();
+            }));
+    });
+
+    it('file has changed', function (callback) {
         fs.writeFileSync('test/src/1.js', 'var a = 1;', {
             encoding: 'utf8',
         });
 
         gulp.src('test/src/1.js')
+            .pipe(diff())
+            .pipe(concatStream(function (buf) {
+                assert.equal(1, buf.length);
+                assert.equal(fs.realpathSync('./') + '/test/src/1.js', buf[0].path);
+
+                fs.writeFileSync('test/src/1.js', originalContent, {
+                    encoding: 'utf8',
+                });
+                callback();
+            }));
+    });
+
+    it('file has changed - stream', function (callback) {
+        fs.writeFileSync('test/src/1.js', 'var a = 1;', {
+            encoding: 'utf8',
+        });
+
+        gulp.src('test/src/1.js',{buffer:false})
             .pipe(diff())
             .pipe(concatStream(function (buf) {
                 assert.equal(1, buf.length);

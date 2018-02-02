@@ -12,7 +12,7 @@
     "node": ">=4.0.0"
   },
   "scripts": {
-    "test": "mocha test/*.js"
+    "test": "cp test/src/2.js test/src/1.js && mocha test/*.js"
   },
   "files": [
     "index.js"
