@@ -1,11 +1,23 @@
+'use strict';
+
+const messages = {
+    changes             : '[diff log] Changes detected.',
+    noChanges           : '[diff log] No changes.',
+    flushing            : '[diff log] flushing hash...',
+    flushingCompleted   : '[diff log] flushing hash completed!',
+    flushingAll         : '[diff log] flushing all hashes...',
+    flushingAllCompleted: '[diff log] flushing hashes completed!',
+    hashNotExisting     : '[diff warning] hash file does not exist.'
+};
+
 function captureStream ( stream )
 {
-    var _stream = stream;
-    var _write = stream.write;
+    let _stream = stream;
+    let _write = stream.write;
     
-    var output  = [];
+    let output  = [];
     
-    var write = function ()
+    const write = function ()
     {
         output.push([].slice.call(arguments));
     };
@@ -20,14 +32,18 @@ function captureStream ( stream )
             _stream.write = _write;
             reset && this.reset();
         },
-        get : function ( wantString )
+        get: function ()
         {
-            return wantString ? output.join('') : output;
+            return {
+                s   : output.join(''),
+                has : function (s) { return this.s.indexOf(s) > -1 }
+            };
         },
-        reset : function ()
+        reset: function ()
         {
             output.length = 0;
-        }
+        },
+        messages    : messages
     };
 };
 

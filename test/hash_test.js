@@ -20,9 +20,9 @@ describe('hash', function () {
         gulp.src('test/src/*.js')
             .pipe(diff())
             .pipe(concatStream(function (buf) {
-                let out = capture.get(true);
+                let out = capture.get();
                 capture.off(false);
-                assert(out.indexOf('[diff log] Changes detected.') > -1);
+                assert(out.has(capture.messages.changes));
                 assert.equal(3, buf.length);
                 callback();
             }))
@@ -36,9 +36,9 @@ describe('hash', function () {
                 hash: 'another'
             }))
             .pipe(concatStream(function (buf) {
-                let out = capture.get(true);
+                let out = capture.get();
                 capture.off(false);
-                assert(out.indexOf('[diff log] Changes detected.') > -1);
+                assert(out.has(capture.messages.changes));
                 assert.equal(3, buf.length);
                 callback();
             }))
@@ -53,11 +53,11 @@ describe('hash', function () {
                 hash: 'another'
             }))
             .pipe(concatStream(function (buf) {
-                let out = capture.get(true);
+                let out = capture.get();
                 capture.off(false);
-                assert(out.indexOf('[diff log] flushing hash...') > -1);
-                assert(out.indexOf('[diff log] flushing hash completed!') > -1);
-                assert(out.indexOf('[diff log] Changes detected.') > -1);
+                assert(out.has(capture.messages.flushing));
+                assert(out.has(capture.messages.flushingCompleted));
+                assert(out.has(capture.messages.changes));
                 assert.equal(3, buf.length);
                 callback();
             }))
@@ -69,9 +69,9 @@ describe('hash', function () {
         gulp.src('test/src/*.js')
             .pipe(diff())
             .pipe(concatStream(function (buf) {
-                let out = capture.get(true);
+                let out = capture.get();
                 capture.off(false);
-                assert(out.indexOf('[diff log] No changes.') > -1);
+                assert(out.has(capture.messages.noChanges));
                 assert.equal(0, buf.length);
                 callback();
             }))

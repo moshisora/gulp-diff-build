@@ -24,11 +24,11 @@ describe('filter', function () {
                 dest: 'test/src/2.js'
             }))
             .pipe(concatStream(function (buf) {
-                let out = capture.get(true);
+                let out = capture.get();
                 capture.off(false);
-                assert(out.indexOf('[diff log] flushing hash...') > -1);
-                assert(out.indexOf('[diff warning] hash file does not exist.') > -1);
-                assert(out.indexOf('[diff log] Changes detected.') > -1);
+                assert(out.has(capture.messages.flushing));
+                assert(out.has(capture.messages.hashNotExisting));
+                assert(out.has(capture.messages.changes));
                 assert.equal(1, buf.length);
                 assert.equal(fs.realpathSync('./') + '/test/src/2.js', buf[0].path);
                 callback();
@@ -44,11 +44,11 @@ describe('filter', function () {
                 dest: 'test/src/3.js'
             }))
             .pipe(concatStream(function (buf) {
-                let out = capture.get(true);
+                let out = capture.get();
                 capture.off(false);
-                assert(out.indexOf('[diff log] flushing hash...') > -1);
-                assert(out.indexOf('[diff log] flushing hash completed!') > -1);
-                assert(out.indexOf('[diff log] Changes detected.') > -1);
+                assert(out.has(capture.messages.flushing));
+                assert(out.has(capture.messages.flushingCompleted));
+                assert(out.has(capture.messages.changes));
                 assert.equal(1, buf.length);
                 assert.equal(fs.realpathSync('./') + '/test/src/3.js', buf[0].path);
                 callback();
@@ -67,11 +67,11 @@ describe('filter', function () {
                 ]
             }))
             .pipe(concatStream(function (buf) {
-                let out = capture.get(true);
+                let out = capture.get();
                 capture.off(false);
-                assert(out.indexOf('[diff log] flushing hash...') > -1);
-                assert(out.indexOf('[diff log] flushing hash completed!') > -1);
-                assert(out.indexOf('[diff log] Changes detected.') > -1);
+                assert(out.has(capture.messages.flushing));
+                assert(out.has(capture.messages.flushingCompleted));
+                assert(out.has(capture.messages.changes));
                 assert.equal(2, buf.length);
                 assert.equal(fs.realpathSync('./') + '/test/src/2.js', buf[0].path);
                 assert.equal(fs.realpathSync('./') + '/test/src/3.js', buf[1].path);
@@ -91,11 +91,11 @@ describe('filter', function () {
                 ]
             }))
             .pipe(concatStream(function (buf) {
-                let out = capture.get(true);
+                let out = capture.get();
                 capture.off(false);
-                assert(out.indexOf('[diff log] flushing hash...') > -1);
-                assert(out.indexOf('[diff log] flushing hash completed!') > -1);
-                assert(out.indexOf('[diff log] Changes detected.') > -1);
+                assert(out.has(capture.messages.flushing));
+                assert(out.has(capture.messages.flushingCompleted));
+                assert(out.has(capture.messages.changes));
                 assert.equal(2, buf.length);
                 assert.equal(fs.realpathSync('./') + '/test/src/2.js', buf[0].path);
                 assert.equal(fs.realpathSync('./') + '/test/src/3.js', buf[1].path);

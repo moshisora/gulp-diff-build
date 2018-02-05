@@ -25,9 +25,9 @@ describe('run', function () {
         gulp.src('test/src/*.js')
             .pipe(diff())
             .pipe(concatStream(function (buf) {
-                let out = capture.get(true);
+                let out = capture.get();
                 capture.off(false);
-                assert(out.indexOf('[diff log] Changes detected.') > -1);
+                assert(out.has(capture.messages.changes));
                 assert.equal(3, buf.length);
                 callback();
             }))
@@ -39,9 +39,9 @@ describe('run', function () {
         gulp.src('test/src/*.js')
             .pipe(diff())
             .pipe(concatStream(function (buf) {
-                let out = capture.get(true);
+                let out = capture.get();
                 capture.off(false);
-                assert(out.indexOf('[diff log] No changes.') > -1);
+                assert(out.has(capture.messages.noChanges));
                 assert.equal(0, buf.length);
                 callback();
             }))
@@ -53,9 +53,9 @@ describe('run', function () {
         gulp.src('test/src/*.js',{buffer:false})
             .pipe(diff())
             .pipe(concatStream(function (buf) {
-                let out = capture.get(true);
+                let out = capture.get();
                 capture.off(false);
-                assert(out.indexOf('[diff log] No changes.') > -1);
+                assert(out.has(capture.messages.noChanges));
                 assert.equal(0, buf.length);
                 callback();
             }))
@@ -71,9 +71,9 @@ describe('run', function () {
         gulp.src('test/src/1.js')
             .pipe(diff())
             .pipe(concatStream(function (buf) {
-                let out = capture.get(true);
+                let out = capture.get();
                 capture.off(false);
-                assert(out.indexOf('[diff log] Changes detected.') > -1);
+                assert(out.has(capture.messages.changes));
                 assert.equal(1, buf.length);
                 assert.equal(fs.realpathSync('./') + '/test/src/1.js', buf[0].path);
 
@@ -94,9 +94,9 @@ describe('run', function () {
         gulp.src('test/src/1.js',{buffer:false})
             .pipe(diff())
             .pipe(concatStream(function (buf) {
-                let out = capture.get(true);
+                let out = capture.get();
                 capture.off(false);
-                assert(out.indexOf('[diff log] Changes detected.') > -1);
+                assert(out.has(capture.messages.changes));
                 assert.equal(1, buf.length);
                 assert.equal(fs.realpathSync('./') + '/test/src/1.js', buf[0].path);
 
@@ -115,11 +115,11 @@ describe('run', function () {
                 clear: true
             }))
             .pipe(concatStream(function (buf) {
-                let out = capture.get(true);
+                let out = capture.get();
                 capture.off(false);
-                assert(out.indexOf('[diff log] flushing hash...') > -1);
-                assert(out.indexOf('[diff log] flushing hash completed!') > -1);
-                assert(out.indexOf('[diff log] Changes detected.') > -1);
+                assert(out.has(capture.messages.flushing));
+                assert(out.has(capture.messages.flushingCompleted));
+                assert(out.has(capture.messages.changes));
                 assert.equal(3, buf.length);
                 callback();
             }))
@@ -135,9 +135,9 @@ describe('run', function () {
         gulp.src('test/src/*.js')
             .pipe(diff())
             .pipe(concatStream(function (buf) {
-                let out = capture.get(true);
+                let out = capture.get();
                 capture.off(false);
-                assert(out.indexOf('[diff log] Changes detected.') > -1);
+                assert(out.has(capture.messages.changes));
                 assert.equal(2, buf.length);
 
                 fs.writeFileSync('test/src/1.js', originalContent, {

@@ -22,9 +22,9 @@ describe('flush all', function () {
                 hash: 'hash1'
             }))
             .pipe(concatStream(function (buf) {
-                let out = capture.get(true);
+                let out = capture.get();
                 capture.off(false);
-                assert(out.indexOf('[diff log] Changes detected.') > -1);
+                assert(out.has(capture.messages.changes));
                 assert.equal(3, buf.length);
                 callback();
             }))
@@ -38,9 +38,9 @@ describe('flush all', function () {
                 hash: 'hash2'
             }))
             .pipe(concatStream(function (buf) {
-                let out = capture.get(true);
+                let out = capture.get();
                 capture.off(false);
-                assert(out.indexOf('[diff log] Changes detected.') > -1);
+                assert(out.has(capture.messages.changes));
                 assert.equal(3, buf.length);
                 callback();
             }))
@@ -54,9 +54,9 @@ describe('flush all', function () {
                 hash: 'hash1'
             }))
             .pipe(concatStream(function (buf) {
-                let out = capture.get(true);
+                let out = capture.get();
                 capture.off(false);
-                assert(out.indexOf('[diff log] No changes.') > -1);
+                assert(out.has(capture.messages.noChanges));
                 assert.equal(0, buf.length);
                 callback();
             }))
@@ -70,9 +70,9 @@ describe('flush all', function () {
                 hash: 'hash2'
             }))
             .pipe(concatStream(function (buf) {
-                let out = capture.get(true);
+                let out = capture.get();
                 capture.off(false);
-                assert(out.indexOf('[diff log] No changes.') > -1);
+                assert(out.has(capture.messages.noChanges));
                 assert.equal(0, buf.length);
                 callback();
             }))
@@ -86,11 +86,11 @@ describe('flush all', function () {
                 clearAll: true
             }))
             .pipe(concatStream(function (buf) {
-                let out = capture.get(true);
+                let out = capture.get();
                 capture.off(false);
-                assert(out.indexOf('[diff log] flushing all hashes...') > -1);
-                assert(out.indexOf('[diff log] flushing hashes completed!') > -1);
-                assert(out.indexOf('[diff log] Changes detected.') > -1);
+                assert(out.has(capture.messages.flushingAll));
+                assert(out.has(capture.messages.flushingAllCompleted));
+                assert(out.has(capture.messages.changes));
                 assert.equal(3, buf.length);
                 callback();
             }))
@@ -104,9 +104,9 @@ describe('flush all', function () {
                 hash: 'hash1'
             }))
             .pipe(concatStream(function (buf) {
-                let out = capture.get(true);
+                let out = capture.get();
                 capture.off(false);
-                assert(out.indexOf('[diff log] Changes detected.') > -1);
+                assert(out.has(capture.messages.changes));
                 assert.equal(3, buf.length);
                 callback();
             }))
@@ -120,9 +120,9 @@ describe('flush all', function () {
                 hash: 'hash2'
             }))
             .pipe(concatStream(function (buf) {
-                let out = capture.get(true);
+                let out = capture.get();
                 capture.off(false);
-                assert(out.indexOf('[diff log] Changes detected.') > -1);
+                assert(out.has(capture.messages.changes));
                 assert.equal(3, buf.length);
                 callback();
             }))
