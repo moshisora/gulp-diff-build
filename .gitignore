@@ -3,4 +3,7 @@ node_modules
 dist
 .gulp
 gulpfile.js
+
+# for IDE
+.idea
 *.xcworkspace/*
