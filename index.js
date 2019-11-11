@@ -1,19 +1,19 @@
-'use strict';
+'use strict'
 
-const util = require('gulp-util');
-const through = require('through2');
-const fs = require('fs');
-const crypto = require('crypto');
-const mkdirp = require('mkdirp');
-const path = require('path');
+const util = require('gulp-util')
+const through = require('through2')
+const fs = require('fs')
+const crypto = require('crypto')
+const mkdirp = require('mkdirp')
+const path = require('path')
 
 const SETTING = {
     path: '.gulp/gulp-diff-build/',
     hash: '.gulp/gulp-diff-build/hash.json'
-};
+}
 
 module.exports = function (options) {
-    options = options || {};
+    options = options || {}
 
     let destFiles = [],
         hashFiles = [],
@@ -21,151 +21,148 @@ module.exports = function (options) {
         filter = [],
         cached = {},
         hasDiff = false,
-        hashPath = '';
+        hashPath = ''
 
     if ('dest' in options) {
         if (Array.isArray(options.dest)) {
-            filter = options.dest;
+            filter = options.dest
         } else if (typeof (options.dest) === 'string') {
-            filter.push(options.dest);
+            filter.push(options.dest)
         } else {
-            util.log(util.colors.red('[error] dest is invalid value'));
+            util.log(util.colors.red('[error] dest is invalid value'))
         }
     }
 
     if (typeof (options.hash) === 'string') {
-        hashPath = options.hash;
-        if (!hashPath.match(/\.json$/)) hashPath += '.json';
-        hashPath = SETTING.path + hashPath;
+        hashPath = options.hash
+        if (!hashPath.match(/\.json$/)) hashPath += '.json'
+        hashPath = SETTING.path + hashPath
     }
 
-    hashPath = hashPath || SETTING.hash;
+    hashPath = hashPath || SETTING.hash
 
-    if (options.clear === true) flushHash(hashPath);
-    if (options.clearAll === true) flushHashAll();
+    if (options.clear === true) flushHash(hashPath)
+    if (options.clearAll === true) flushHashAll()
 
     if (isExist(hashPath)) {
-        cached = JSON.parse(fs.readFileSync(hashPath, 'utf8'));
+        cached = JSON.parse(fs.readFileSync(hashPath, 'utf8'))
     } else {
-        hasDiff = true;
+        hasDiff = true
     }
 
-    return through.obj(function(file, encoding, callback)
-    {
-        if ( file.isNull() ) callback(null,file);
-        else {
-            if ( file.isBuffer() ) transform(file, encoding, callback);
-            if ( file.isStream() )
-            {
-                file.contents.pipe(through(function(chunk,enc,cb){
-                    file.contents = chunk;
-                    transform(file, encoding, callback);
-                    cb();
-                }));
+    return through.obj(function (file, encoding, callback) {
+            if (file.isNull()) callback(null, file)
+            else {
+                if (file.isBuffer()) transform(file, encoding, callback)
+                if (file.isStream()) {
+                    file.contents.pipe(through(function (chunk, enc, cb) {
+                        file.contents = chunk
+                        transform(file, encoding, callback)
+                        cb()
+                    }))
+                }
             }
         }
-    }
-    ,flush);
+        , flush)
 
     function transform(file, encoding, callback) {
-        let filename = path.relative(file.cwd, file.path);
+        let filename = path.relative(file.cwd, file.path)
 
         if (!hasDiff && (cached[filename] !== sha1(file.contents))) {
-            hasDiff = true;
+            hasDiff = true
         }
 
-        hashFiles.push(file);
-        hashPaths.push(filename);
+        hashFiles.push(file)
+        hashPaths.push(filename)
 
         if ((filter.length === 0) || (filter.indexOf(filename) >= 0)) {
-            destFiles.push(file);
+            destFiles.push(file)
         }
 
-        callback();
+        callback()
     }
 
     function flush(callback) {
         let me = this,
-            hash = cached;
+            hash = cached
 
-        if (sizeOfHash(cached) != hashPaths.length) {
-            hasDiff = true;
+        if (sizeOfHash(cached) !== hashPaths.length) {
+            hasDiff = true
         }
 
         if (hasDiff) {
-            util.log(util.colors.green('[diff log] Changes detected.'));
+            util.log(util.colors.green('[diff log] Changes detected.'))
 
             Array.from(hashFiles).forEach(function (file, index) {
-                let filename = hashPaths[index];
-                hash[filename] = sha1(file.contents);
-            });
-            mkdirp.sync(hashPath.replace(/[^\/]+\.json$/, ''));
+                let filename = hashPaths[index]
+                hash[filename] = sha1(file.contents)
+            })
+            mkdirp.sync(hashPath.replace(/[^\/]+\.json$/, ''))
             fs.writeFileSync(hashPath, JSON.stringify(hash), {
                 encoding: 'utf8',
-            });
+            })
 
-            Array.from(destFiles).forEach(function (file, index) {
-                me.push(file);
-            });
+            Array.from(destFiles).forEach(function (file) {
+                me.push(file)
+            })
         } else {
-            util.log(util.colors.green('[diff log] No changes.'));
+            util.log(util.colors.green('[diff log] No changes.'))
         }
-        callback();
+        callback()
     }
-};
+}
 
 function sha1(buf) {
-    return crypto.createHash('sha1').update(buf).digest('hex');
+    return crypto.createHash('sha1').update(buf).digest('hex')
 }
 
 function isExist(path) {
     try {
-        fs.statSync(path);
-        return true;
+        fs.statSync(path)
+        return true
     } catch (error) {
-        if (error.code === 'ENOENT') return false;
+        if (error.code === 'ENOENT') return false
     }
 }
 
 function flushHash(hashPath) {
-    util.log('[diff log] flushing hash...');
+    util.log('[diff log] flushing hash...')
 
     if (!isExist(hashPath)) {
-        util.log(util.colors.yellow('[diff warning] hash file does not exist.'));
-        return;
+        util.log(util.colors.yellow('[diff warning] hash file does not exist.'))
+        return
     }
 
-    fs.unlinkSync(hashPath);
-    util.log(util.colors.green('[diff log] flushing hash completed!'));
+    fs.unlinkSync(hashPath)
+    util.log(util.colors.green('[diff log] flushing hash completed!'))
 }
 
 function flushHashAll() {
-    util.log('[diff log] flushing all hashes...');
+    util.log('[diff log] flushing all hashes...')
 
     if (!isExist(SETTING.path)) {
-        util.log(util.colors.yellow('[diff warning] hash files does not exist.'));
-        return;
+        util.log(util.colors.yellow('[diff warning] hash files does not exist.'))
+        return
     }
 
-    let targetFiles = fs.readdirSync(SETTING.path);
+    let targetFiles = fs.readdirSync(SETTING.path)
 
     if (!targetFiles.length) {
-        util.log(util.colors.yellow('[diff warning] hash files is empty.'));
-        return;
+        util.log(util.colors.yellow('[diff warning] hash files is empty.'))
+        return
     }
 
-    Array.from(targetFiles).forEach(function (file, index) {
-        fs.unlinkSync(SETTING.path + file);
-    });
-    util.log(util.colors.green('[diff log] flushing hashes completed!'));
+    Array.from(targetFiles).forEach(function (file) {
+        fs.unlinkSync(SETTING.path + file)
+    })
+    util.log(util.colors.green('[diff log] flushing hashes completed!'))
 }
 
 function sizeOfHash(hash) {
-    var size = 0;
+    let size = 0
 
-    for (var i in hash) {
-        size++;
+    for (let i in hash) {
+        size++
     }
-
-    return size;
+    return size
 }

@@ -9,7 +9,7 @@
     "url": "http://github.com/moshisora"
   },
   "engines": {
-    "node": ">=4.0.0"
+    "node": ">=8.0.0"
   },
   "scripts": {
     "test": "cp test/src/2.js test/src/1.js && mocha test/tests.js"
@@ -27,14 +27,14 @@
     "diff"
   ],
   "dependencies": {
-    "gulp-util": "~3.0.0",
-    "mkdirp": "~0.5.1",
-    "through2": "~2.0.0"
+    "gulp-util": "3.0.8",
+    "mkdirp": "0.5.1",
+    "through2": "3.0.1"
   },
   "devDependencies": {
-    "concat-stream": "~1.6.0",
-    "gulp": "~3.9.1",
-    "mocha": "*",
-    "rimraf": "~2.5.4"
+    "concat-stream": "2.0.0",
+    "gulp": "4.0.2",
+    "mocha": "6.2.2",
+    "rimraf": "3.0.0"
   }
 }
