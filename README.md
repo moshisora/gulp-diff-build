@@ -1,4 +1,4 @@
-![build status](https://circleci.com/gh/moshisora/gulp-diff-build.svg?style=shield&circle-token=8a39ce8a8622dc749863c218662f9befc01642fd)
+![badge](https://github.com/moshisora/gulp-diff-build/workflows/Node%20CI/badge.svg)
 
 ## gulp-diff-build
 
