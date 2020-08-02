@@ -12,7 +12,10 @@
     "node": ">=10.22.0"
   },
   "scripts": {
-    "test": "cp test/src/2.js test/src/1.js && mocha test/tests.js"
+    "commitmsg": "commitlint -e $GIT_PARAMS",
+    "test": "cp test/src/2.js test/src/1.js && mocha test/tests.js",
+    "release": "standard-version",
+    "release:dryrun": "standard-version --dry-run"
   },
   "files": [
     "index.js"
@@ -32,11 +35,15 @@
     "through2": "^4.0.2"
   },
   "devDependencies": {
+    "@commitlint/cli": "^9.1.2",
+    "@commitlint/config-conventional": "^9.1.1",
     "concat-stream": "^2.0.0",
+    "dot-prop": ">=5.1.1",
     "gulp": "^4.0.2",
     "minimist": "^1.2.5",
     "mocha": "^8.1.0",
     "rimraf": "^3.0.2",
-    "yargs-parser": "^18.1.3"
+    "standard-version": "^8.0.2",
+    "yargs-parser": ">=18.1.2"
   }
 }
