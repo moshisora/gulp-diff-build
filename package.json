@@ -1,6 +1,6 @@
 {
   "name": "gulp-diff-build",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "run tasks only if src files are changed",
   "license": "MIT",
   "repository": "moshisora/gulp-diff-build",
@@ -29,6 +29,9 @@
     "modified",
     "diff"
   ],
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "dependencies": {
     "gulp-util": "^3.0.8",
     "mkdirp": "^1.0.4",
@@ -40,6 +43,7 @@
     "concat-stream": "^2.0.0",
     "dot-prop": ">=5.1.1",
     "gulp": "^4.0.2",
+    "lodash.template": ">=4.5.0",
     "minimist": "^1.2.5",
     "mocha": "^8.1.0",
     "rimraf": "^3.0.2",
