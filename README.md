@@ -9,7 +9,7 @@ gulp module to stream files only if target files are changed.
 ### Install
 
 ```
-$ npm install gulp-diff-build --save-dev
+$ npm install @moshisora/gulp-diff-build --save-dev
 ```
 
 ### Usage
