@@ -1,6 +1,6 @@
 {
   "name": "gulp-diff-build",
-  "version": "1.0.2",
+  "version": "2.0.0",
   "description": "run tasks only if src files are changed",
   "license": "MIT",
   "repository": "moshisora/gulp-diff-build",
@@ -9,10 +9,13 @@
     "url": "http://github.com/moshisora"
   },
   "engines": {
-    "node": ">=8.0.0"
+    "node": "12.x"
   },
   "scripts": {
-    "test": "cp test/src/2.js test/src/1.js && mocha test/tests.js"
+    "commitmsg": "commitlint -e $GIT_PARAMS",
+    "test": "cp test/src/2.js test/src/1.js && mocha test/tests.js",
+    "release": "standard-version",
+    "release:dryrun": "standard-version --dry-run"
   },
   "files": [
     "index.js"
@@ -27,14 +30,20 @@
     "diff"
   ],
   "dependencies": {
-    "gulp-util": "3.0.8",
-    "mkdirp": "0.5.1",
-    "through2": "3.0.1"
+    "gulp-util": "^3.0.8",
+    "mkdirp": "^1.0.4",
+    "through2": "^4.0.2"
   },
   "devDependencies": {
-    "concat-stream": "2.0.0",
-    "gulp": "4.0.2",
-    "mocha": "6.2.2",
-    "rimraf": "3.0.0"
+    "@commitlint/cli": "^9.1.2",
+    "@commitlint/config-conventional": "^9.1.1",
+    "concat-stream": "^2.0.0",
+    "dot-prop": ">=5.1.1",
+    "gulp": "^4.0.2",
+    "minimist": "^1.2.5",
+    "mocha": "^8.1.0",
+    "rimraf": "^3.0.2",
+    "standard-version": "^8.0.2",
+    "yargs-parser": ">=18.1.2"
   }
 }
