@@ -29,6 +29,9 @@
     "modified",
     "diff"
   ],
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "dependencies": {
     "gulp-util": "^3.0.8",
     "mkdirp": "^1.0.4",
