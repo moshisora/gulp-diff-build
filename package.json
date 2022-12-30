@@ -45,7 +45,7 @@
     "gulp": "^4.0.2",
     "lodash.template": ">=4.5.0",
     "minimist": "^1.2.5",
-    "mocha": "^8.1.0",
+    "mocha": "^8.4.0",
     "rimraf": "^3.0.2",
     "standard-version": "^8.0.2",
     "yargs-parser": ">=18.1.2"
